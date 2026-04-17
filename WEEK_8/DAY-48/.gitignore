@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# Environment / secrets
+.env
+.env.local
+*.key
+.DS_Store
+
+# Data (LMS files not committed; synthesized deterministically)
+data/*.csv
+
+# Build artefacts
+_build_notebook.py
