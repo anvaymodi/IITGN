@@ -1,0 +1,154 @@
+# Retrieval-Ready Study Assistant for NCERT Science
+### Week 9 Mini-Project — PG Diploma in AI-ML & Agentic AI Engineering
+
+A Retrieval-Augmented Generation (RAG) system built over NCERT Class 9 Science chapters to answer student questions grounded strictly in textbook content, and refuse questions that fall outside the corpus.
+
+---
+
+## Chapters Used
+
+- **Chapter 8: Motion** — NCERT Class 9 Science
+- **Chapter 9: Force and Laws of Motion** — NCERT Class 9 Science
+
+Source: [https://ncert.nic.in/textbook.php?iesc1=0-11](https://ncert.nic.in/textbook.php?iesc1=0-11)
+
+> **Note:** PDF files are NOT committed to this repository. Download Chapter 8 (`iesc108.pdf`) and Chapter 9 (`iesc109.pdf`) from the NCERT website and place them in the `data/` folder before running the notebook.
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      OFFLINE (INDEX TIME)                    │
+│                                                             │
+│  NCERT PDFs  ──► PyMuPDF Extractor ──► Content Classifier  │
+│                                              │               │
+│                                    ┌─────────▼──────────┐   │
+│                                    │  Semantic Chunker   │   │
+│                                    │  (size=400, ovlp=80)│   │
+│                                    └─────────┬──────────┘   │
+│                                              │               │
+│                                    ┌─────────▼──────────┐   │
+│                                    │   Chunk Store       │   │
+│                                    │ {chunk_id, text,    │   │
+│                                    │  chapter, section,  │   │
+│                                    │  page, content_type}│   │
+│                                    └─────────┬──────────┘   │
+│                                              │               │
+│                                    ┌─────────▼──────────┐   │
+│                                    │   BM25 Index        │   │
+│                                    └─────────┬──────────┘   │
+└──────────────────────────────────────────────┼─────────────┘
+                                               │
+┌──────────────────────────────────────────────┼─────────────┐
+│                      ONLINE (QUERY TIME)      │             │
+│                                              │              │
+│  Student Query ──► BM25 Retriever ◄──────────┘             │
+│                          │                                  │
+│                    Top-k Chunks                             │
+│                          │                                  │
+│              ┌───────────▼──────────────┐                  │
+│              │   Grounding Prompt        │                  │
+│              │ "Refuse if not in context"│                  │
+│              └───────────┬──────────────┘                  │
+│                          │                                  │
+│                   Gemini API (temp=0)                       │
+│                          │                                  │
+│              ┌───────────▼──────────────┐                  │
+│              │  Grounded Answer          │                  │
+│              │  + cited chunk IDs        │                  │
+│              │  OR refusal string        │                  │
+│              └──────────────────────────┘                  │
+└────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Setup Instructions
+
+### 1. Clone the repository
+```bash
+git clone <your-repo-url>
+cd week09-rag-ncert
+```
+
+### 2. Create a virtual environment
+```bash
+python -m venv venv
+source venv/bin/activate        # Linux/Mac
+# venv\Scripts\activate         # Windows
+```
+
+### 3. Install dependencies
+```bash
+pip install pymupdf pdfplumber transformers tokenizers torch rank_bm25 google-generativeai pandas numpy matplotlib
+```
+
+### 4. Download NCERT PDFs
+Download the following files from [https://ncert.nic.in/textbook.php?iesc1=0-11](https://ncert.nic.in/textbook.php?iesc1=0-11):
+- Chapter 8 → save as `data/iesc108.pdf`
+- Chapter 9 → save as `data/iesc109.pdf`
+
+```bash
+mkdir -p data
+# Manually download iesc108.pdf and iesc109.pdf into data/
+```
+
+### 5. Set your Gemini API key
+```bash
+export GEMINI_API_KEY="your_api_key_here"
+```
+> Get a free API key at [https://aistudio.google.com/](https://aistudio.google.com/)
+
+### 6. Run the notebook
+```bash
+jupyter notebook notebook.ipynb
+```
+Run all cells top to bottom. The notebook is self-contained.
+
+---
+
+## Project Structure
+
+```
+week09-rag-ncert/
+├── README.md
+├── notebook.ipynb              # Main project notebook (run this)
+├── evaluation_results.csv      # Auto-generated by notebook
+├── evaluation_results.md       # Human-readable evaluation summary
+├── reflection.md               # Reflection questionnaire answers
+├── data/                       # Place NCERT PDFs here (not committed)
+│   ├── iesc108.pdf             # Chapter 8: Motion
+│   └── iesc109.pdf             # Chapter 9: Force and Laws of Motion
+└── requirements.txt
+```
+
+---
+
+## Rubric Mapping
+
+| Rubric Criterion | Weight | Where Addressed |
+|---|---|---|
+| Problem framing and corpus structuring | 15 | Notebook Section A — content type classification, metadata design |
+| Tokenization and chunking logic | 20 | Notebook Section A — 3-tokenizer comparison table + chunking justification |
+| Retrieval and grounded answering | 20 | Notebook Section B (BM25) + Section C (grounding prompt) |
+| Evaluation quality and failure analysis | 20 | Notebook Section D + `evaluation_results.csv` |
+| Architecture comparison and model reasoning | 15 | Notebook Section A (tokenizer comparison) + reflection.md Part D |
+| Reflection and tradeoff discussion | 10 | `reflection.md` |
+| **Total** | **100** | |
+
+---
+
+## Key Design Decisions
+
+- **Chunker:** Semantic chunking at ~400 tokens with 80-token overlap. Worked examples and their solutions are kept in the same chunk by detecting "Example"/"Solution" boundary markers.
+- **Retriever:** BM25 with simple whitespace tokenization applied consistently at both index time and query time.
+- **Generator:** Gemini API at `temperature=0` for reproducible evaluation scores.
+- **Grounding:** Prompt uses the constraint framing ("refuse if not in context") rather than the permissive framing ("prefer context"), producing measurably fewer hallucinations.
+
+---
+
+## Requirements
+
+See `requirements.txt`. Python 3.10+ required.
