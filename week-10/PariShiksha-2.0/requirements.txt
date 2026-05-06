@@ -1,0 +1,17 @@
+langchain==0.3.*
+langchain-community==0.3.*
+langchain-openai==0.2.*
+langchain-anthropic==0.2.*
+chromadb==0.5.*
+openai>=1.50
+anthropic>=0.39
+tiktoken
+rank_bm25
+sentence-transformers
+cohere
+ragas
+python-dotenv
+pandas
+numpy
+pymupdf
+pdfplumber
