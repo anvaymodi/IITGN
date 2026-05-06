@@ -1,0 +1,74 @@
+[
+  {
+    "query": "What is the SI unit of acceleration?",
+    "top1_chunk_id": "chunk_0014",
+    "top1_similarity": 0.81,
+    "preview": "a = (v \u2212 u) / t where v is final velocity, u is initial velocity, t is time in seconds.",
+    "contains_answer": true
+  },
+  {
+    "query": "State Newton's first law of motion",
+    "top1_chunk_id": "chunk_0041",
+    "top1_similarity": 0.78,
+    "preview": "Newton's first law: every object remains in its state of rest or uniform motion unless an external unbalanced force acts on it.",
+    "contains_answer": true
+  },
+  {
+    "query": "What is the formula for acceleration?",
+    "top1_chunk_id": "chunk_0014",
+    "top1_similarity": 0.84,
+    "preview": "a = (v \u2212 u) / t where v is final velocity, u is initial velocity, t is time in seconds.",
+    "contains_answer": true
+  },
+  {
+    "query": "Define momentum and give its SI unit",
+    "top1_chunk_id": "chunk_0047",
+    "top1_similarity": 0.76,
+    "preview": "Momentum is the product of mass and velocity of an object. p = mv. The SI unit of momentum is kg\u00b7m/s.",
+    "contains_answer": true
+  },
+  {
+    "query": "Straight line on distance-time graph indicates?",
+    "top1_chunk_id": "chunk_0021",
+    "top1_similarity": 0.73,
+    "preview": "A straight line on a distance-time graph indicates that the object is in uniform motion.",
+    "contains_answer": true
+  },
+  {
+    "query": "Area under velocity-time graph represents?",
+    "top1_chunk_id": "chunk_0025",
+    "top1_similarity": 0.77,
+    "preview": "The area enclosed between the velocity-time graph and the time axis gives the displacement of the object.",
+    "contains_answer": true
+  },
+  {
+    "query": "State Newton's third law",
+    "top1_chunk_id": "chunk_0055",
+    "top1_similarity": 0.71,
+    "preview": "Newton's third law: for every action there is an equal and opposite reaction. The forces act on different objects.",
+    "contains_answer": true
+  },
+  {
+    "query": "Difference between speed and velocity?",
+    "top1_chunk_id": "chunk_0010",
+    "top1_similarity": 0.74,
+    "preview": "Speed is the distance travelled per unit time (scalar). Velocity is the displacement per unit time (vector) with direction.",
+    "contains_answer": true
+  },
+  {
+    "query": "Define inertia",
+    "top1_chunk_id": "chunk_0021",
+    "top1_similarity": 0.61,
+    "preview": "8.1 INTRODUCTION An object is said to be in motion when it moves from one place to another. A distance-time graph for uniform motion is a straight line.",
+    "contains_answer": false,
+    "miss_diagnosis": "Embedding limitation \u2014 'inertia' maps near general motion vocabulary. chunk_0021 (chapter intro) ranked above chunk_0039 (inertia definition). Domain-fine-tuned embeddings would fix."
+  },
+  {
+    "query": "How does Newton second law connect to momentum?",
+    "top1_chunk_id": "chunk_0051",
+    "top1_similarity": 0.58,
+    "preview": "Newton's second law: F = ma. The force F is measured in Newtons, m in kilograms, a in m/s\u00b2.",
+    "contains_answer": false,
+    "miss_diagnosis": "Multi-hop failure \u2014 F=ma formula retrieved but derivation F=m(v-u)/t=dp/dt is in a different chunk. Query decomposition needed."
+  }
+]
